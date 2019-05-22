@@ -4,9 +4,51 @@ import scipy.ndimage
 def generate_spectra(freqs, util_RM, n_spectra=100, min_phi=-1000, max_phi=1000,
                      phi_sampling=300, max_noise=0.333, phi_padding=0,
                      complex_fraction=0.5):
-    """Generate simulated Faraday spectra."""
+    """Generate simulated Faraday spectra.
+
+    Uses a two-screen model.
+
+    Parameters
+    ----------
+    freqs : array or list
+        Frequencies sampled, sorted.
+    util_RM : module
+        util_RM module from RMTools.
+    n_spectra : int
+        Number of spectra to generate (default: 100).
+    min_phi : float
+        Minimum Faraday depth in rad/m^2 (default: -1000).
+    max_phi : float
+        Maximum Faraday depth in rad/m^2 (default: 1000).
+    phi_sampling : int
+        Faraday depth sampling rate (default: 300).
+    max_noise : float
+        Maximum noise as a fraction of polarised intensity (default: 0.333).
+    phi_padding : int
+        How far from the edges of the spectrum to place depths (default: 0).
+    complex_fraction : float
+        Fraction of generated spectra that are complex
+        (i.e. not single-screen; default: 0.5)
+
+    Returns
+    -------
+    dict
+        {
+            depths: N x 2 array of Faraday depths.
+            amps: N x 2 array of polarised intensities normalised to largest
+                component.
+            simple: N array of whether spectra are simple.
+            spectra: N x F array of true polarised spectra.
+            spectra_noisy: N x F array of polarised spectra with noise.
+            fdf_gt: N x D Groundtruth Faraday spectra.
+            sim_fdf: N x D Simulated Faraday dispersion function
+                (Faraday spectra).
+            targets: N x D Smoothed true Faraday spectra.
+            noise: N array of noise levels.
+        }
+    """
     # Compute the RMSFs.
-    lsq = (3e8 / freqs) ** 2
+    lsq = (3e8 / numpy.asarray(freqs)) ** 2
     phis = numpy.linspace(min_phi, max_phi, phi_sampling)
 
     # Generate some Faraday spectra.
