@@ -85,7 +85,8 @@ def generate_spectra(freqs, util_RM, n_spectra=100, min_phi=-1000, max_phi=1000,
 
     # Add Gaussian noise.
     sigmas = numpy.random.uniform(0, max_noise, size=(n_spectra, 1))
-    noise = numpy.random.normal(loc=0, scale=sigmas, size=(n_spectra, len(lsq)))
+    noise = numpy.random.normal(loc=0, scale=sigmas, size=(n_spectra, len(lsq))) + \
+        1j * numpy.random.normal(loc=0, scale=sigmas, size=(n_spectra, len(lsq)))
     spectra_noisy = spectra + noise
 
     # Blank random channels.
