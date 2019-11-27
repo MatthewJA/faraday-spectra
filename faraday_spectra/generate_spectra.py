@@ -93,7 +93,7 @@ def generate_spectra(freqs, util_RM, n_spectra=100, min_phi=-1000, max_phi=1000,
     spectra_noisy *= numpy.where(channel_mask, numpy.nan, 1)
 
     # RM synthesis on the spectra.
-    sim_fdf, fwhm = util_RM.do_rmsynth_planes(spectra_noisy.real.T, spectra_noisy.imag.T, lsq, phis)
+    sim_fdf, fwhm = util_RM.do_rmsynth_planes(spectra_noisy.real.T, spectra_noisy.imag.T, lsq, phis, lam0Sq_m2=numpy.mean(lsq))
 
     sim_fdf = sim_fdf.T
 
